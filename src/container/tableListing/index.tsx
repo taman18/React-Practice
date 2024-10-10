@@ -6,9 +6,12 @@ import {
 import { Pagination, Stack } from "@mui/material";
 import axios from "axios";
 import React, { useEffect, useState } from "react";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import { setCountryData } from "@/store/slice/countrySlice";
+
 
 const TableListing: React.FC = () => {
+  const dispatch = useDispatch();
   const [pageNumber, setPageNumber] = useState(1);
   const [limit, setLimit] = useState(10);
   const countrySelector = useSelector(
@@ -18,8 +21,13 @@ const TableListing: React.FC = () => {
   let [countryData, setCountryData] = useState<UniversityData[]>([]);
   
   const getCountryData = async () => {
-    const { data } = await axios.get(API_URL);
-    setCountryData(data);
+    try {
+      const { data } = await axios.get(API_URL);
+      setCountryData(data);
+    }
+    catch(err) {
+      console.log(err);
+    }
   };
   
   const updatePageNumber = (
@@ -41,7 +49,7 @@ const TableListing: React.FC = () => {
   }, [countrySelector, pageNumber]);
 
   return (
-    <div className="max-w-6xl mx-auto py-8">
+    <div className="max-w-6xl mx-auto py-8 max-h-[500px] overflow-auto	">
       <table className="table-auto border-collapse w-full shadow-lg bg-white text-sm">
         <thead className="bg-gray-200 text-gray-600 uppercase text-xs font-semibold">
           <tr>
@@ -83,7 +91,7 @@ const TableListing: React.FC = () => {
         </tbody>
       </table>
 
-      <section className="flex items-center justify-between mt-8">
+      <section className="flex w-[1160px] items-center justify-between mt-8 fixed top-[590px]">
         <div>
           <h2 className="text-lg font-medium">Set Limit</h2>
           <input
