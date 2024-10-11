@@ -5,10 +5,12 @@ import { UniversityData } from "@/interface/countryData.type";
 interface CountryState {
   selectedCountryName: string;
   countryData: UniversityData[];
+  searchedData: string;
 }
 const initialState: CountryState = {
   selectedCountryName: "",
   countryData: [],
+  searchedData: "",
 };
 
 const countrySlice = createSlice({
@@ -19,10 +21,15 @@ const countrySlice = createSlice({
       state.selectedCountryName = action.payload.Name;
     },
     setCountryData: (state, action: PayloadAction<UniversityData[]>) => {
-    state.countryData = action.payload;
-    }
+      state.countryData = action.payload;
+    },
+    setSearchedData: (state, action: PayloadAction<string>) => {
+      state.searchedData = action.payload;
+    },
   },
 });
 
-export const { setCountryName, setCountryData } = countrySlice.actions;
+export const { setCountryName, setCountryData, setSearchedData } =
+  countrySlice.actions;
 export default countrySlice.reducer;
+

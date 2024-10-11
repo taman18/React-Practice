@@ -1,25 +1,24 @@
 "use client";
 import {
   CountrySliceState,
+  StoreType,
   UniversityData,
 } from "@/interface/countryData.type";
 import { Pagination, Stack } from "@mui/material";
 import axios from "axios";
 import React, { useEffect, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { setCountryData } from "@/store/slice/countrySlice";
+import {useSelector } from "react-redux";
 
 
 const TableListing: React.FC = () => {
-  const dispatch = useDispatch();
+  const searchedSelector = useSelector((state: StoreType) => state.countrySlice.searchedData)
   const [pageNumber, setPageNumber] = useState(1);
   const [limit, setLimit] = useState(10);
   const countrySelector = useSelector(
     (state: CountrySliceState) => state.countrySlice.selectedCountryName
   );
-  const API_URL = `http://universities.hipolabs.com/search?name=${countrySelector}&offset=${pageNumber}&limit=${limit}`;
+  const API_URL = `http://universities.hipolabs.com/search?name=${searchedSelector}&country=${countrySelector}&offset=${pageNumber}&limit=${limit}`;
   let [countryData, setCountryData] = useState<UniversityData[]>([]);
-  
   const getCountryData = async () => {
     try {
       const { data } = await axios.get(API_URL);
@@ -46,7 +45,7 @@ const TableListing: React.FC = () => {
 
   useEffect(() => {
     getCountryData();
-  }, [countrySelector, pageNumber]);
+  }, [countrySelector, pageNumber, searchedSelector]);
 
   return (
     <div className="max-w-6xl mx-auto py-8 max-h-[500px] overflow-auto	">
@@ -91,7 +90,7 @@ const TableListing: React.FC = () => {
         </tbody>
       </table>
 
-      <section className="flex w-[1160px] items-center justify-between mt-8 fixed top-[590px]">
+      <section className="flex w-[1160px] items-center justify-between mt-8 fixed top-[680px]">
         <div>
           <h2 className="text-lg font-medium">Set Limit</h2>
           <input

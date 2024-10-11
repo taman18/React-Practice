@@ -21,3 +21,12 @@ export interface CountrySliceState {
     Name: string,
     Code: string
 }
+
+
+export interface StoreType {
+  countrySlice: {
+    countryData: [];
+    searchedData: string;
+    selectedCountryName: string;
+  };
+}
